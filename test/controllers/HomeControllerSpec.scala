@@ -2,8 +2,6 @@ package controllers
 
 import cats.effect.IO
 import com.google.inject.AbstractModule
-import io.chrisdavenport.log4cats.Logger
-import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
 import net.codingwell.scalaguice.ScalaModule
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -20,17 +18,29 @@ class WorkingModule extends AbstractModule with ScalaModule {
 
 class HomeControllerSpec extends AnyFlatSpec with Matchers {
 
-  private val application: Injector = new GuiceInjectorBuilder()
-    .bindings(bind[ExecutionContext].to(ExecutionContext.global))
-    .bindings(bind[ApplicationLifecycle].to[DefaultApplicationLifecycle])
-    .bindings(bind[CustomTFInterface[IO]].toInstance(new CustomTFInterfaceImpl)) // fails with it
-    //.bindings(new WorkingModule()) // works with it
-    .bindings(new CatsEffectModule())
-    .injector()
+  it should "test1" in {
+    val application: Injector = new GuiceInjectorBuilder()
+      .bindings(bind[ExecutionContext].to(ExecutionContext.global))
+      .bindings(bind[ApplicationLifecycle].to[DefaultApplicationLifecycle])
+      .bindings(bind[CustomTFInterface[IO]].toInstance(new CustomTFInterfaceImpl))
+      .bindings(new CatsEffectModule())
+      .injector()
 
-  "di" should "work with tf" in {
-    // all the dependencies are provided in CatsEffectModule
-    application.instanceOf[InjecableWithTfDependencies]
+    application.instanceOf[CustomTFInterface[IO]] // works
+    //application.instanceOf[InjecableWithTfDependencies] // fails
+
+  }
+
+  it should "test2" in {
+    val application: Injector = new GuiceInjectorBuilder()
+      .bindings(bind[ExecutionContext].to(ExecutionContext.global))
+      .bindings(bind[ApplicationLifecycle].to[DefaultApplicationLifecycle])
+      .bindings(new WorkingModule()) // works with it
+      .bindings(new CatsEffectModule())
+      .injector()
+
+    //application.instanceOf[CustomTFInterface[IO]] // fails
+    application.instanceOf[InjecableWithTfDependencies] // works
   }
 
 }

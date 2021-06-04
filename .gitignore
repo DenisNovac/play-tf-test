@@ -1,0 +1,14 @@
+.g8
+.idea
+.metals
+.code
+target
+.bloop
+.bsp
+*.log
+**/target/
+**/logs/
+ui/client/.env
+.vscode/settings.json
+
+*.un~

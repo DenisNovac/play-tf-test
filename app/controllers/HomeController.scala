@@ -10,8 +10,11 @@ import play.api.mvc._
   * application's home page.
   */
 @Singleton
-class HomeController @Inject() (val controllerComponents: ControllerComponents)(implicit logger: Logger[IO])
-    extends BaseController {
+class HomeController @Inject() (
+    val controllerComponents: ControllerComponents
+)(implicit
+    logger: Logger[IO]
+) extends BaseController {
 
   /** Create an Action to render an HTML page.
     *
@@ -21,7 +24,8 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)(
     */
   def index() = Action { implicit request: Request[AnyContent] =>
     // something works wrong with logger but it does not matter - it gets here through DI
-    (Logger[IO].info("logger works") >> IO(println("logger works but hidden"))).unsafeRunSync()
+    (Logger[IO].info("logger works") >>
+      IO(println("logger works but hidden"))).unsafeRunSync()
     Ok("Ok")
   }
 }

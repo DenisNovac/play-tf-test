@@ -8,7 +8,8 @@ import net.codingwell.scalaguice.ScalaModule
 
 class CatsEffectModule extends AbstractModule with ScalaModule {
 
-  override def configure(): Unit =
+  override def configure(): Unit = {
     bind[Logger[IO]].toInstance(Slf4jLogger.getLogger[IO])
+  }
 
 }
